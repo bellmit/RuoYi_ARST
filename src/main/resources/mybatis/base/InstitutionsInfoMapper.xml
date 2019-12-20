@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjeve.project.base.institutionsInfo.mapper.InstitutionsInfoMapper">
+    
+    <resultMap type="InstitutionsInfo" id="InstitutionsInfoResult">
+        <result property="id"    column="id"    />
+        <result property="instName"    column="INST_NAME"    />
+        <result property="instType"    column="INST_TYPE"    />
+        <result property="areaCode"    column="AREA_CODE"    />
+        <result property="address"    column="ADDRESS"    />
+        <result property="contant"    column="CONTANT"    />
+        <result property="tel"    column="TEL"    />
+        <result property="email"    column="EMAIL"    />
+    </resultMap>
+
+    <sql id="selectInstitutionsInfoVo">
+        select id, INST_NAME, INST_TYPE, AREA_CODE, ADDRESS, CONTANT, TEL, EMAIL from base_institutions_info
+    </sql>
+
+    <select id="selectInstitutionsInfoList" parameterType="InstitutionsInfo" resultMap="InstitutionsInfoResult">
+        <include refid="selectInstitutionsInfoVo"/>
+        <where>  
+            <if test="instName != null  and instName != ''"> and INST_NAME like concat('%', #{instName}, '%')</if>
+            <if test="instType != null  and instType != ''"> and INST_TYPE = #{instType}</if>
+            <if test="areaCode != null  and areaCode != ''"> and AREA_CODE = #{areaCode}</if>
+            <if test="address != null  and address != ''"> and ADDRESS like concat('%', #{address}, '%')</if>
+            <if test="contant != null  and contant != ''"> and CONTANT = #{contant}</if>
+            <if test="tel != null  and tel != ''"> and TEL = #{tel}</if>
+            <if test="email != null  and email != ''"> and EMAIL = #{email}</if>
+        </where>
+    </select>
+    
+    <select id="selectInstitutionsInfoById" parameterType="String" resultMap="InstitutionsInfoResult">
+        <include refid="selectInstitutionsInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertInstitutionsInfo" parameterType="InstitutionsInfo">
+        insert into base_institutions_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="instName != null  and instName != ''">INST_NAME,</if>
+            <if test="instType != null  and instType != ''">INST_TYPE,</if>
+            <if test="areaCode != null  and areaCode != ''">AREA_CODE,</if>
+            <if test="address != null  and address != ''">ADDRESS,</if>
+            <if test="contant != null  and contant != ''">CONTANT,</if>
+            <if test="tel != null  and tel != ''">TEL,</if>
+            <if test="email != null  and email != ''">EMAIL,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="instName != null  and instName != ''">#{instName},</if>
+            <if test="instType != null  and instType != ''">#{instType},</if>
+            <if test="areaCode != null  and areaCode != ''">#{areaCode},</if>
+            <if test="address != null  and address != ''">#{address},</if>
+            <if test="contant != null  and contant != ''">#{contant},</if>
+            <if test="tel != null  and tel != ''">#{tel},</if>
+            <if test="email != null  and email != ''">#{email},</if>
+         </trim>
+    </insert>
+
+    <update id="updateInstitutionsInfo" parameterType="InstitutionsInfo">
+        update base_institutions_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="instName != null  and instName != ''">INST_NAME = #{instName},</if>
+            <if test="instType != null  and instType != ''">INST_TYPE = #{instType},</if>
+            <if test="areaCode != null  and areaCode != ''">AREA_CODE = #{areaCode},</if>
+            <if test="address != null  and address != ''">ADDRESS = #{address},</if>
+            <if test="contant != null  and contant != ''">CONTANT = #{contant},</if>
+            <if test="tel != null  and tel != ''">TEL = #{tel},</if>
+            <if test="email != null  and email != ''">EMAIL = #{email},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteInstitutionsInfoById" parameterType="String">
+        delete from base_institutions_info where id = #{id}
+    </delete>
+
+    <delete id="deleteInstitutionsInfoByIds" parameterType="String">
+        delete from base_institutions_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
