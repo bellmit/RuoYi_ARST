@@ -114,4 +114,14 @@ public class DictDataController extends BaseController
     {
         return toAjax(dictDataService.deleteDictDataByIds(ids));
     }
+
+    /**
+     * 新增字典类型
+     */
+    @GetMapping("/getDataByDictType/{dictType}")
+    @ResponseBody
+    public List<DictData> getDataByDictType(@PathVariable("dictType") String dictType) {
+        List<DictData> dictDataList = dictDataService.selectDictDataByType(dictType);
+        return dictDataList;
+    }
 }

@@ -15,10 +15,9 @@
             <div class="form-group">    
                 <label class="col-sm-3 control-label">机构类型：</label>
                 <div class="col-sm-8">
-                    <select name="instType" class="form-control m-b" required>
-                        <option value="">所有</option>
+                    <select name="instType" id="instType" class="form-control m-b" required>
+
                     </select>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
                 </div>
             </div>
             <div class="form-group">    
@@ -54,17 +53,7 @@
         </form>
     </div>
     <th:block th:include="include :: footer" />
-    <script type="text/javascript">
-        var prefix = ctx + "base/institutionsInfo"
-        $("#form-institutionsInfo-add").validate({
-            focusCleanup: true
-        });
-
-        function submitHandler() {
-            if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-institutionsInfo-add').serialize());
-            }
-        }
-    </script>
+    <script type="text/javascript" src="../../static/js/commonUtils.js" th:src="@{/js/commonUtils.js}"></script>
+    <script type="text/javascript" src="../../static/js/base/institutionsInfo/add.js" th:src="@{/js/base/institutionsInfo/add.js}"></script>
 </body>
 </html>
