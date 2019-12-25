@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增设备信息')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-deviceInfo-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备中文名称：</label>
+                <div class="col-sm-8">
+                    <input name="deviceCname" class="form-control" type="text" maxlength="30" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备英文名称：</label>
+                <div class="col-sm-8">
+                    <input name="deviceEname" class="form-control" type="text" maxlength="30">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">生产厂家：</label>
+                <div class="col-sm-8">
+                    <textarea name="manufacturer" class="form-control" maxlength="150"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="deviceRemark" class="form-control" maxlength="300"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "base/deviceInfo"
+        $("#form-deviceInfo-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-deviceInfo-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

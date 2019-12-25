@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增维修报告')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-maintenance-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">机构ID：</label>
+                <div class="col-sm-8">
+                    <input name="instId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备ID：</label>
+                <div class="col-sm-8">
+                    <input name="deviceId" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备序列号：</label>
+                <div class="col-sm-8">
+                    <input name="deviceSn" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">故障描述：</label>
+                <div class="col-sm-8">
+                    <input name="faultDesc" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">维修报告照片：</label>
+                <div class="col-sm-8">
+                    <textarea name="photoPath" class="form-control"></textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "report/maintenance"
+        $("#form-maintenance-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-maintenance-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjeve.project.report.ventilator.mapper.RepVentilatorMapper">
+    
+    <resultMap type="RepVentilator" id="RepVentilatorResult">
+        <result property="repId"    column="REP_ID"    />
+        <result property="instId"    column="INST_ID"    />
+        <result property="deviceId"    column="DEVICE_ID"    />
+        <result property="computerSystemSn"    column="COMPUTER_SYSTEM_SN"    />
+        <result property="airCompressorBrand"    column="AIR_COMPRESSOR_BRAND"    />
+        <result property="acbSn"    column="ACB_SN"    />
+        <result property="photoPath"    column="PHOTO_PATH"    />
+    </resultMap>
+
+    <sql id="selectRepVentilatorVo">
+        select REP_ID, INST_ID, DEVICE_ID, COMPUTER_SYSTEM_SN, AIR_COMPRESSOR_BRAND, ACB_SN, PHOTO_PATH from rep_ventilator
+    </sql>
+
+    <select id="selectRepVentilatorList" parameterType="RepVentilator" resultMap="RepVentilatorResult">
+        <include refid="selectRepVentilatorVo"/>
+        <where>  
+            <if test="instId != null  and instId != ''"> and INST_ID = #{instId}</if>
+            <if test="deviceId != null  and deviceId != ''"> and DEVICE_ID = #{deviceId}</if>
+            <if test="computerSystemSn != null  and computerSystemSn != ''"> and COMPUTER_SYSTEM_SN = #{computerSystemSn}</if>
+            <if test="airCompressorBrand != null  and airCompressorBrand != ''"> and AIR_COMPRESSOR_BRAND = #{airCompressorBrand}</if>
+            <if test="acbSn != null  and acbSn != ''"> and ACB_SN = #{acbSn}</if>
+            <if test="photoPath != null  and photoPath != ''"> and PHOTO_PATH = #{photoPath}</if>
+        </where>
+    </select>
+    
+    <select id="selectRepVentilatorById" parameterType="String" resultMap="RepVentilatorResult">
+        <include refid="selectRepVentilatorVo"/>
+        where REP_ID = #{repId}
+    </select>
+        
+    <insert id="insertRepVentilator" parameterType="RepVentilator">
+        <selectKey keyProperty="repId" resultType="string" order="BEFORE">
+            select replace(uuid(), '-', '') as id from dual
+        </selectKey>
+        insert into rep_ventilator
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="repId != null  and repId != ''">REP_ID,</if>
+            <if test="instId != null  and instId != ''">INST_ID,</if>
+            <if test="deviceId != null  and deviceId != ''">DEVICE_ID,</if>
+            <if test="computerSystemSn != null  and computerSystemSn != ''">COMPUTER_SYSTEM_SN,</if>
+            <if test="airCompressorBrand != null  and airCompressorBrand != ''">AIR_COMPRESSOR_BRAND,</if>
+            <if test="acbSn != null  and acbSn != ''">ACB_SN,</if>
+            <if test="photoPath != null  and photoPath != ''">PHOTO_PATH,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="repId != null  and repId != ''">#{repId},</if>
+            <if test="instId != null  and instId != ''">#{instId},</if>
+            <if test="deviceId != null  and deviceId != ''">#{deviceId},</if>
+            <if test="computerSystemSn != null  and computerSystemSn != ''">#{computerSystemSn},</if>
+            <if test="airCompressorBrand != null  and airCompressorBrand != ''">#{airCompressorBrand},</if>
+            <if test="acbSn != null  and acbSn != ''">#{acbSn},</if>
+            <if test="photoPath != null  and photoPath != ''">#{photoPath},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRepVentilator" parameterType="RepVentilator">
+        update rep_ventilator
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="instId != null  and instId != ''">INST_ID = #{instId},</if>
+            <if test="deviceId != null  and deviceId != ''">DEVICE_ID = #{deviceId},</if>
+            <if test="computerSystemSn != null  and computerSystemSn != ''">COMPUTER_SYSTEM_SN = #{computerSystemSn},</if>
+            <if test="airCompressorBrand != null  and airCompressorBrand != ''">AIR_COMPRESSOR_BRAND = #{airCompressorBrand},</if>
+            <if test="acbSn != null  and acbSn != ''">ACB_SN = #{acbSn},</if>
+            <if test="photoPath != null  and photoPath != ''">PHOTO_PATH = #{photoPath},</if>
+        </trim>
+        where REP_ID = #{repId}
+    </update>
+
+    <delete id="deleteRepVentilatorById" parameterType="String">
+        delete from rep_ventilator where REP_ID = #{repId}
+    </delete>
+
+    <delete id="deleteRepVentilatorByIds" parameterType="String">
+        delete from rep_ventilator where REP_ID in 
+        <foreach item="repId" collection="array" open="(" separator="," close=")">
+            #{repId}
+        </foreach>
+    </delete>
+    
+</mapper>

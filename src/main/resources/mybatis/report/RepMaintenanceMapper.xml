@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjeve.project.report.maintenance.mapper.RepMaintenanceMapper">
+    
+    <resultMap type="RepMaintenance" id="RepMaintenanceResult">
+        <result property="repId"    column="REP_ID"    />
+        <result property="instId"    column="INST_ID"    />
+        <result property="deviceId"    column="DEVICE_ID"    />
+        <result property="deviceSn"    column="DEVICE_SN"    />
+        <result property="faultDesc"    column="FAULT_DESC"    />
+        <result property="photoPath"    column="PHOTO_PATH"    />
+    </resultMap>
+
+    <sql id="selectRepMaintenanceVo">
+        select REP_ID, INST_ID, DEVICE_ID, DEVICE_SN, FAULT_DESC, PHOTO_PATH from rep_maintenance
+    </sql>
+
+    <select id="selectRepMaintenanceList" parameterType="RepMaintenance" resultMap="RepMaintenanceResult">
+        <include refid="selectRepMaintenanceVo"/>
+        <where>  
+            <if test="instId != null  and instId != ''"> and INST_ID = #{instId}</if>
+            <if test="deviceId != null  and deviceId != ''"> and DEVICE_ID = #{deviceId}</if>
+            <if test="deviceSn != null  and deviceSn != ''"> and DEVICE_SN = #{deviceSn}</if>
+            <if test="faultDesc != null  and faultDesc != ''"> and FAULT_DESC = #{faultDesc}</if>
+            <if test="photoPath != null  and photoPath != ''"> and PHOTO_PATH = #{photoPath}</if>
+        </where>
+    </select>
+    
+    <select id="selectRepMaintenanceById" parameterType="String" resultMap="RepMaintenanceResult">
+        <include refid="selectRepMaintenanceVo"/>
+        where REP_ID = #{repId}
+    </select>
+        
+    <insert id="insertRepMaintenance" parameterType="RepMaintenance">
+        <selectKey keyProperty="repId" resultType="string" order="BEFORE">
+            select replace(uuid(), '-', '') as id from dual
+        </selectKey>
+        insert into rep_maintenance
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="repId != null  and repId != ''">REP_ID,</if>
+            <if test="instId != null  and instId != ''">INST_ID,</if>
+            <if test="deviceId != null  and deviceId != ''">DEVICE_ID,</if>
+            <if test="deviceSn != null  and deviceSn != ''">DEVICE_SN,</if>
+            <if test="faultDesc != null  and faultDesc != ''">FAULT_DESC,</if>
+            <if test="photoPath != null  and photoPath != ''">PHOTO_PATH,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="repId != null  and repId != ''">#{repId},</if>
+            <if test="instId != null  and instId != ''">#{instId},</if>
+            <if test="deviceId != null  and deviceId != ''">#{deviceId},</if>
+            <if test="deviceSn != null  and deviceSn != ''">#{deviceSn},</if>
+            <if test="faultDesc != null  and faultDesc != ''">#{faultDesc},</if>
+            <if test="photoPath != null  and photoPath != ''">#{photoPath},</if>
+         </trim>
+    </insert>
+
+    <update id="updateRepMaintenance" parameterType="RepMaintenance">
+        update rep_maintenance
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="instId != null  and instId != ''">INST_ID = #{instId},</if>
+            <if test="deviceId != null  and deviceId != ''">DEVICE_ID = #{deviceId},</if>
+            <if test="deviceSn != null  and deviceSn != ''">DEVICE_SN = #{deviceSn},</if>
+            <if test="faultDesc != null  and faultDesc != ''">FAULT_DESC = #{faultDesc},</if>
+            <if test="photoPath != null  and photoPath != ''">PHOTO_PATH = #{photoPath},</if>
+        </trim>
+        where REP_ID = #{repId}
+    </update>
+
+    <delete id="deleteRepMaintenanceById" parameterType="String">
+        delete from rep_maintenance where REP_ID = #{repId}
+    </delete>
+
+    <delete id="deleteRepMaintenanceByIds" parameterType="String">
+        delete from rep_maintenance where REP_ID in 
+        <foreach item="repId" collection="array" open="(" separator="," close=")">
+            #{repId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改设备信息')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-deviceInfo-edit" th:object="${deviceInfo}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备中文名称：</label>
+                <div class="col-sm-8">
+                    <input name="deviceCname" th:field="*{deviceCname}" class="form-control" type="text" maxlength="30" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">设备英文名称：</label>
+                <div class="col-sm-8">
+                    <input name="deviceEname" th:field="*{deviceEname}" class="form-control" type="text" maxlength="30">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">生产厂家：</label>
+                <div class="col-sm-8">
+                    <textarea name="manufacturer" class="form-control" maxlength="150">[[*{manufacturer}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备注：</label>
+                <div class="col-sm-8">
+                    <textarea name="deviceRemark" class="form-control" maxlength="300">[[*{deviceRemark}]]</textarea>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "base/deviceInfo";
+        $("#form-deviceInfo-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-deviceInfo-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

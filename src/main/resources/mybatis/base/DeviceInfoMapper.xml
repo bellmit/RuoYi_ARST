@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjeve.project.base.deviceInfo.mapper.DeviceInfoMapper">
+    
+    <resultMap type="DeviceInfo" id="DeviceInfoResult">
+        <result property="id"    column="id"    />
+        <result property="deviceCname"    column="DEVICE_CNAME"    />
+        <result property="deviceEname"    column="DEVICE_ENAME"    />
+        <result property="manufacturer"    column="MANUFACTURER"    />
+        <result property="deviceRemark"    column="DEVICE_REMARK"    />
+    </resultMap>
+
+    <sql id="selectDeviceInfoVo">
+        select id, DEVICE_CNAME, DEVICE_ENAME, MANUFACTURER, DEVICE_REMARK from base_device_info
+    </sql>
+
+    <select id="selectDeviceInfoList" parameterType="DeviceInfo" resultMap="DeviceInfoResult">
+        <include refid="selectDeviceInfoVo"/>
+        <where>  
+            <if test="deviceCname != null  and deviceCname != ''"> and DEVICE_CNAME like concat('%', #{deviceCname}, '%')</if>
+            <if test="deviceEname != null  and deviceEname != ''"> and DEVICE_ENAME like concat('%', #{deviceEname}, '%')</if>
+            <if test="manufacturer != null  and manufacturer != ''"> and MANUFACTURER = #{manufacturer}</if>
+            <if test="deviceRemark != null  and deviceRemark != ''"> and DEVICE_REMARK = #{deviceRemark}</if>
+        </where>
+    </select>
+    
+    <select id="selectDeviceInfoById" parameterType="String" resultMap="DeviceInfoResult">
+        <include refid="selectDeviceInfoVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertDeviceInfo" parameterType="DeviceInfo">
+        <selectKey keyProperty="id" resultType="string" order="BEFORE">
+            select replace(uuid(), '-', '') as id from dual
+        </selectKey>
+        insert into base_device_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="deviceCname != null  and deviceCname != ''">DEVICE_CNAME,</if>
+            <if test="deviceEname != null  and deviceEname != ''">DEVICE_ENAME,</if>
+            <if test="manufacturer != null  and manufacturer != ''">MANUFACTURER,</if>
+            <if test="deviceRemark != null  and deviceRemark != ''">DEVICE_REMARK,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="deviceCname != null  and deviceCname != ''">#{deviceCname},</if>
+            <if test="deviceEname != null  and deviceEname != ''">#{deviceEname},</if>
+            <if test="manufacturer != null  and manufacturer != ''">#{manufacturer},</if>
+            <if test="deviceRemark != null  and deviceRemark != ''">#{deviceRemark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateDeviceInfo" parameterType="DeviceInfo">
+        update base_device_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="deviceCname != null  and deviceCname != ''">DEVICE_CNAME = #{deviceCname},</if>
+            <if test="deviceEname != null  and deviceEname != ''">DEVICE_ENAME = #{deviceEname},</if>
+            <if test="manufacturer != null  and manufacturer != ''">MANUFACTURER = #{manufacturer},</if>
+            <if test="deviceRemark != null  and deviceRemark != ''">DEVICE_REMARK = #{deviceRemark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteDeviceInfoById" parameterType="String">
+        delete from base_device_info where id = #{id}
+    </delete>
+
+    <delete id="deleteDeviceInfoByIds" parameterType="String">
+        delete from base_device_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
