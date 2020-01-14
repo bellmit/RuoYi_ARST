@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjeve.project.store.spareTrans.mapper.StoreSpareTransMapper">
+    
+    <resultMap type="StoreSpareTrans" id="StoreSpareTransResult">
+        <result property="id"    column="id"    />
+        <result property="spareId"    column="spare_id"    />
+        <result property="transTime"    column="trans_time"    />
+        <result property="transFlag"    column="trans_flag"    />
+        <result property="number"    column="number"    />
+        <result property="useSource"    column="use_source"    />
+    </resultMap>
+
+    <sql id="selectStoreSpareTransVo">
+        select id, spare_id, trans_time, trans_flag, number, use_source from store_spare_trans
+    </sql>
+
+    <select id="selectStoreSpareTransList" parameterType="StoreSpareTrans" resultMap="StoreSpareTransResult">
+        <include refid="selectStoreSpareTransVo"/>
+        <where>  
+            <if test="spareId != null  and spareId != ''"> and spare_id = #{spareId}</if>
+            <if test="transTime != null "> and trans_time = #{transTime}</if>
+            <if test="transFlag != null  and transFlag != ''"> and trans_flag = #{transFlag}</if>
+            <if test="number != null "> and number = #{number}</if>
+            <if test="useSource != null  and useSource != ''"> and use_source = #{useSource}</if>
+        </where>
+        order by trans_time desc
+    </select>
+    
+    <select id="selectStoreSpareTransById" parameterType="String" resultMap="StoreSpareTransResult">
+        <include refid="selectStoreSpareTransVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertStoreSpareTrans" parameterType="StoreSpareTrans">
+        <selectKey keyProperty="id" resultType="string" order="BEFORE">
+            select replace(uuid(), '-', '') as id from dual
+        </selectKey>
+        insert into store_spare_trans
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="spareId != null  and spareId != ''">spare_id,</if>
+            <if test="transTime != null ">trans_time,</if>
+            <if test="transFlag != null  and transFlag != ''">trans_flag,</if>
+            <if test="number != null ">number,</if>
+            <if test="useSource != null  and useSource != ''">use_source,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="spareId != null  and spareId != ''">#{spareId},</if>
+            <if test="transTime != null ">#{transTime},</if>
+            <if test="transFlag != null  and transFlag != ''">#{transFlag},</if>
+            <if test="number != null ">#{number},</if>
+            <if test="useSource != null  and useSource != ''">#{useSource},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStoreSpareTrans" parameterType="StoreSpareTrans">
+        update store_spare_trans
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="spareId != null  and spareId != ''">spare_id = #{spareId},</if>
+            <if test="transTime != null ">trans_time = #{transTime},</if>
+            <if test="transFlag != null  and transFlag != ''">trans_flag = #{transFlag},</if>
+            <if test="number != null ">number = #{number},</if>
+            <if test="useSource != null  and useSource != ''">use_source = #{useSource},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStoreSpareTransById" parameterType="String">
+        delete from store_spare_trans where id = #{id}
+    </delete>
+
+    <delete id="deleteStoreSpareTransByIds" parameterType="String">
+        delete from store_spare_trans where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

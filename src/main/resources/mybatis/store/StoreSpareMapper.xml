@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjeve.project.store.spare.mapper.StoreSpareMapper">
+    
+    <resultMap type="StoreSpare" id="StoreSpareResult">
+        <result property="id"    column="id"    />
+        <result property="spaceName"    column="space_name"    />
+        <result property="spec"    column="spec"    />
+        <result property="source"    column="source"    />
+        <result property="number"    column="number"    />
+    </resultMap>
+
+    <sql id="selectStoreSpareVo">
+        select id, space_name, spec, source, number from store_spare
+    </sql>
+
+    <select id="selectStoreSpareList" parameterType="StoreSpare" resultMap="StoreSpareResult">
+        <include refid="selectStoreSpareVo"/>
+        <where>  
+            <if test="spaceName != null  and spaceName != ''"> and space_name like concat('%', #{spaceName}, '%')</if>
+            <if test="spec != null  and spec != ''"> and spec = #{spec}</if>
+            <if test="source != null  and source != ''"> and source = #{source}</if>
+            <if test="number != null "> and number = #{number}</if>
+        </where>
+    </select>
+    
+    <select id="selectStoreSpareById" parameterType="String" resultMap="StoreSpareResult">
+        <include refid="selectStoreSpareVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertStoreSpare" parameterType="StoreSpare">
+        <selectKey keyProperty="id" resultType="string" order="BEFORE">
+            select replace(uuid(), '-', '') as id from dual
+        </selectKey>
+        insert into store_spare
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="spaceName != null  and spaceName != ''">space_name,</if>
+            <if test="spec != null  and spec != ''">spec,</if>
+            <if test="source != null  and source != ''">source,</if>
+            <if test="number != null ">number,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="spaceName != null  and spaceName != ''">#{spaceName},</if>
+            <if test="spec != null  and spec != ''">#{spec},</if>
+            <if test="source != null  and source != ''">#{source},</if>
+            <if test="number != null ">#{number},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStoreSpare" parameterType="StoreSpare">
+        update store_spare
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="spaceName != null  and spaceName != ''">space_name = #{spaceName},</if>
+            <if test="spec != null  and spec != ''">spec = #{spec},</if>
+            <if test="source != null  and source != ''">source = #{source},</if>
+            <if test="number != null ">number = #{number},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStoreSpareById" parameterType="String">
+        delete from store_spare where id = #{id}
+    </delete>
+
+    <delete id="deleteStoreSpareByIds" parameterType="String">
+        delete from store_spare where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

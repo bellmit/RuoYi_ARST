@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增库存备件')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-spare-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备件名称：</label>
+                <div class="col-sm-8">
+                    <input name="spaceName" class="form-control" type="text" maxlength="30" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">规格：</label>
+                <div class="col-sm-8">
+                    <input name="spec" class="form-control" type="text" maxlength="10" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备件来源：</label>
+                <div class="col-sm-8">
+                    <textarea name="source" class="form-control" maxlength="300"></textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">数量：</label>
+                <div class="col-sm-8">
+                    <input name="number" class="form-control" type="text" required>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "store/spare"
+        $("#form-spare-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-spare-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

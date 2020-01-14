@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改库存备件')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-spare-edit" th:object="${storeSpare}">
+            <input name="id" th:field="*{id}" type="hidden">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">备件名称：</label>
+                <div class="col-sm-8">
+                    <input name="spaceName" th:field="*{spaceName}" class="form-control" type="text" required>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">规格：</label>
+                <div class="col-sm-8">
+                    <input name="spec" th:field="*{spec}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">备件来源：</label>
+                <div class="col-sm-8">
+                    <textarea name="source" class="form-control">[[*{source}]]</textarea>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">数量：</label>
+                <div class="col-sm-8">
+                    <input name="number" th:field="*{number}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "store/spare";
+        $("#form-spare-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-spare-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

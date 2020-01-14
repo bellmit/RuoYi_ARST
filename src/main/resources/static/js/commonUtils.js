@@ -24,8 +24,6 @@ function dicSelectVal(selectId, dicType) {
                 (($('#' + selectId.toString()).val() == null) || ($('#' + selectId.toString()).val() == ''))) {
                 $('#' + selectId.toString()).empty(); //清空原有下拉选数据
                 var optionFirst = document.createElement("option");
-                $(optionFirst).val("");
-                $(optionFirst).text("--全部--");
                 $('#' + selectId.toString()).append(optionFirst);
                 for (var i = 0, length = data.length; i < length; i++) {
                     var option = document.createElement("option");
@@ -37,4 +35,46 @@ function dicSelectVal(selectId, dicType) {
             // 数据放置到sessionStorage中一份
             sessionStorage.setItem(dicType, JSON.stringify(data));
         }
+}
+
+/**
+ * 获取Date的yyyy-mm-dd hh:mi:ss
+ * @param Date
+ * @returns {string}
+ */
+function formatYMDHMS(Date){
+    var Y = Date.getFullYear();
+    var M = Date.getMonth() + 1;
+    M = M < 10 ? '0' + M : M;// 不够两位补充0
+    var D = Date.getDate();
+    D = D < 10 ? '0' + D : D;
+    var H = Date.getHours();
+    H = H < 10 ? '0' + H : H;
+    var Mi = Date.getMinutes();
+    Mi = Mi < 10 ? '0' + Mi : Mi;
+    var S = Date.getSeconds();
+    S = S < 10 ? '0' + S : S;
+    return Y + '-' + M + '-' + D + ' ' + H + ':' + Mi + ':' + S;
+}
+
+
+/**
+ * 根据页面下拉选转义为中文
+ * @param selectId
+ * @param value
+ * @returns {string|*}
+ */
+function transDicValToName(selectId, value){
+    let result = value;
+    let queryPath = '#' + selectId + ' option';
+    if (value === undefined || value === "" || value === null) {
+        return "";
+    } else {
+        $(queryPath).each(function () {
+            if ($(this).val().toString() === value.toString()) {
+                result = $(this).text();
+            }
+        });
+    }
+    return result;
 }

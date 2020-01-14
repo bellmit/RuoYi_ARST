@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+    <th:block th:include="include :: header('库存备件出入库列表')" />
+</head>
+<body class="gray-bg">
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('store:spareTrans:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('store:spareTrans:remove')}]];
+        var prefix = ctx + "store/spareTrans";
+        var spareId = [[${spareId}]];
+
+        $(function() {
+            var options = {
+                url: prefix + "/list?spareId="+spareId,
+                modalName: "库存备件出入库",
+                columns: [{
+                    checkbox: true
+                },
+                {
+                    field : 'transTime', 
+                    title : '出入库时间'
+                },
+                {
+                    field : 'transFlag', 
+                    title : '出库/入库'
+                },
+                {
+                    field : 'number', 
+                    title : '数量'
+                },
+                {
+                    field : 'useSource', 
+                    title : '使用地点/备件来源'
+                }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bjeve.project.store.apparatus.mapper.StoreApparatusMapper">
+    
+    <resultMap type="StoreApparatus" id="StoreApparatusResult">
+        <result property="id"    column="id"    />
+        <result property="apparName"    column="appar_name"    />
+        <result property="apparType"    column="appar_type"    />
+        <result property="transTime"    column="trans_time"    />
+        <result property="sn"    column="sn"    />
+        <result property="isTrans"    column="is_trans"    />
+    </resultMap>
+
+    <sql id="selectStoreApparatusVo">
+        select id, appar_name, appar_type, trans_time, sn, is_trans from store_apparatus
+    </sql>
+
+    <select id="selectStoreApparatusList" parameterType="StoreApparatus" resultMap="StoreApparatusResult">
+        <include refid="selectStoreApparatusVo"/>
+        <where>  
+            <if test="apparName != null  and apparName != ''"> and appar_name like concat('%', #{apparName}, '%')</if>
+            <if test="apparType != null  and apparType != ''"> and appar_type = #{apparType}</if>
+            <if test="transTime != null "> and trans_time = #{transTime}</if>
+            <if test="sn != null  and sn != ''"> and sn = #{sn}</if>
+            <if test="isTrans != null  and isTrans != ''"> and is_trans = #{isTrans}</if>
+        </where>
+    </select>
+    
+    <select id="selectStoreApparatusById" parameterType="String" resultMap="StoreApparatusResult">
+        <include refid="selectStoreApparatusVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertStoreApparatus" parameterType="StoreApparatus">
+        <selectKey keyProperty="id" resultType="string" order="BEFORE">
+            select replace(uuid(), '-', '') as id from dual
+        </selectKey>
+        insert into store_apparatus
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">id,</if>
+            <if test="apparName != null  and apparName != ''">appar_name,</if>
+            <if test="apparType != null  and apparType != ''">appar_type,</if>
+            <if test="transTime != null ">trans_time,</if>
+            <if test="sn != null  and sn != ''">sn,</if>
+            <if test="isTrans != null  and isTrans != ''">is_trans,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null  and id != ''">#{id},</if>
+            <if test="apparName != null  and apparName != ''">#{apparName},</if>
+            <if test="apparType != null  and apparType != ''">#{apparType},</if>
+            <if test="transTime != null ">#{transTime},</if>
+            <if test="sn != null  and sn != ''">#{sn},</if>
+            <if test="isTrans != null  and isTrans != ''">#{isTrans},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStoreApparatus" parameterType="StoreApparatus">
+        update store_apparatus
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="apparName != null  and apparName != ''">appar_name = #{apparName},</if>
+            <if test="apparType != null  and apparType != ''">appar_type = #{apparType},</if>
+            <if test="transTime != null ">trans_time = #{transTime},</if>
+            <if test="sn != null  and sn != ''">sn = #{sn},</if>
+            <if test="isTrans != null  and isTrans != ''">is_trans = #{isTrans},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStoreApparatusById" parameterType="String">
+        delete from store_apparatus where id = #{id}
+    </delete>
+
+    <delete id="deleteStoreApparatusByIds" parameterType="String">
+        delete from store_apparatus where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>
