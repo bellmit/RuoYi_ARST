@@ -38,6 +38,8 @@
 		<swagger.version>2.9.2</swagger.version>
 		<poi.version>3.17</poi.version>
 		<oshi.version>3.9.1</oshi.version>
+		<!-- 时间戳打包 -->
+		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
 	</properties>
 
 	<dependencies>
@@ -279,7 +281,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>${project.artifactId}</finalName>
+		<finalName>${project.artifactId}-${maven.build.timestamp}</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
