@@ -57,6 +57,58 @@ function formatYMDHMS(Date){
     return Y + '-' + M + '-' + D + ' ' + H + ':' + Mi + ':' + S;
 }
 
+/**
+ * 从SessionStorage中获取字典中文含义
+ * @param selectId
+ * @param value
+ * @returns {string|*}
+ */
+function getDicNameBySession(selectId, value){
+    var storageVal = JSON.parse(sessionStorage.getItem(selectId));
+    for (var i = 0, length = (storageVal === null ? 0 : storageVal.length); i < length; i++) {
+        if (value == storageVal[i].dictValue) {
+            return storageVal[i].dictLabel;
+        }
+    }
+    return value;
+}
+
+/**
+ * 从数据库中获取字典中文含义
+ * @param selectId
+ * @param value
+ * @returns {string|*}
+ */
+function getDicNameByDataBase(selectId, value){
+    let resBySession = getDicNameBySession(selectId, value)
+    if(value != resBySession){
+        return resBySession;
+    }
+
+    $.ajax({
+        url: '/system/dict/data/getDataByDictType/' + dicType.toString(),
+        data: '',
+        type: 'GET',
+        async: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            success(data);
+        },
+        error: function () {
+            window.location.href = "/error.html";
+        }
+    });
+
+    function success(data) {
+        for (var i = 0, length = (data === null ? 0 : data.length); i < length; i++) {
+            if (value == data[i].dictValue) {
+                return data[i].dictLabel;
+            }
+        }
+        return value;
+    }
+}
 
 /**
  * 根据页面下拉选转义为中文

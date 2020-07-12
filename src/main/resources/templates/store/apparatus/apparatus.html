@@ -8,18 +8,19 @@
         <div class="row">
             <div class="col-sm-12 search-collapse">
                 <form id="formId">
+                    <input id="apparType" name="apparType" type="hidden" th:value="${apparType}" />
                     <div class="select-list">
                         <ul>
                             <li>
                                 <p>机器型号：</p>
                                 <input type="text" name="apparName"/>
                             </li>
-                            <li>
-                                <p>机器类型：</p>
-                                <select name="apparType" id="apparType">
+<!--                            <li>-->
+<!--                                <p>机器类型：</p>-->
+<!--                                <select name="apparType" id="apparType">-->
 
-                                </select>
-                            </li>
+<!--                                </select>-->
+<!--                            </li>-->
                             <li class="select-time">
                                 <p>入库时间：</p>
                                 <input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTransTime]"/>
@@ -98,7 +99,7 @@
                     field : 'apparType', 
                     title : '机器类型',
                     formatter: function(value, row, index) {
-                        return transDicValToName("apparType", value);
+                        return getDicNameByDataBase("apparType", value);
                     }
                 },
                 {

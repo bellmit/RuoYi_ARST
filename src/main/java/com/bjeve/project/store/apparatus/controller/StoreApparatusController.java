@@ -1,6 +1,8 @@
 package com.bjeve.project.store.apparatus.controller;
 
 import java.util.List;
+
+import com.bjeve.project.monitor.server.domain.Sys;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,8 +38,9 @@ public class StoreApparatusController extends BaseController
 
     @RequiresPermissions("store:apparatus:view")
     @GetMapping()
-    public String apparatus()
+    public String apparatus(ModelMap mmap,String type)
     {
+        mmap.put("apparType", type);
         return prefix + "/apparatus";
     }
 
